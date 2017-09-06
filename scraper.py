@@ -1,10 +1,10 @@
 #!bin/bash/env python3
 import requests, bs4, pprint
-
+'''
 redditUrl = "http://reddit.com/r/wallpapers"
 redditRequest = requests.get(redditUrl)
 redditRequest.raise_for_status()
-
+'''
 fourChanUrl = "http://4chan.org/wg/"
 fourChanRequest = requests.get(fourChanUrl)
 fourChanRequest.raise_for_status()
@@ -20,4 +20,3 @@ def fourChanUrlStripper(fourChanArgs):
 	pprint.pprint("Here is the output: \n " + str(output))
 	print(str(len(output)) + " image URLs were scraped from 4chan")
 
-def redditUrlStripper
