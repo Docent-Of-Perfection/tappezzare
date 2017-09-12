@@ -16,7 +16,9 @@ def fourChanUrlStripper(fourChanArgs):
 	output = []
 	allContent = fourChanMarkup.select(".fileThumb")
 	for link in allContent:
-            output.append([link.attrs['href'][2:],link.find('img').attrs['src'][2:]])
+		# indicates the file has been deleted
+		if "href" not in link.attrs:
+			continue
+		output.append([link.attrs['href'][2:],link.find('img').attrs['src'][2:]])
 	pprint.pprint("Here is the output: \n " + str(output))
 	print(str(len(output)) + " image URLs were scraped from 4chan")
-
