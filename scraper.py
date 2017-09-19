@@ -5,10 +5,12 @@ import re, sys, requests, bs4, pprint
 # redditRequest = requests.get(redditUrl)
 # redditRequest.raise_for_status()
 
-DEFAULT_URL = "http://4chan.org/wg/"
+DEFAULT_URL = "https://boards.4chan.org/wg/"
 
 # Returns image urls from 4chan  in format image:thumbnail
 def fourchan_url_stripper(board_url):
+    if not re.search('^https?://(boards\.4chan\.org/wg/?|4chan\.org/wg/?)', board_url):
+        raise NotImplementedError("only 4chan wg board is implemented")
     fourchan_request = requests.get(board_url)
     fourchan_request.raise_for_status()
     fourchan_markup = bs4.BeautifulSoup(fourchan_request.text, "lxml")
