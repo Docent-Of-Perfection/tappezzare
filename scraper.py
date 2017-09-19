@@ -1,24 +1,36 @@
-#!bin/bash/env python3
-import requests, bs4, pprint
-'''
-redditUrl = "http://reddit.com/r/wallpapers"
-redditRequest = requests.get(redditUrl)
-redditRequest.raise_for_status()
-'''
-fourChanUrl = "http://4chan.org/wg/"
-fourChanRequest = requests.get(fourChanUrl)
-fourChanRequest.raise_for_status()
+#!/usr/bin/env python3
+import re, sys, requests, bs4, pprint
 
-fourChanMarkup = bs4.BeautifulSoup(fourChanRequest.text,"lxml")
+# redditUrl = "http://reddit.com/r/wallpapers"
+# redditRequest = requests.get(redditUrl)
+# redditRequest.raise_for_status()
 
-#Returns image urls from 4chan  in format image:thumbnail
-def fourChanUrlStripper(fourChanArgs):
+DEFAULT_URL = "http://4chan.org/wg/"
+
+# Returns image urls from 4chan  in format image:thumbnail
+def fourchan_url_stripper(board_url):
+    fourchan_request = requests.get(board_url)
+    fourchan_request.raise_for_status()
+    fourchan_markup = bs4.BeautifulSoup(fourchan_request.text, "lxml")
+    
     output = []
-    allContent = fourChanMarkup.select(".fileThumb")
-    for link in allContent:
+    all_content = fourchan_markup.select(".fileThumb")
+    # exclude sticky and FAQ  images if the landing page for wg
+    if board_url == "http://4chan.org/wg/":
+        all_content = all_content[2:]
+    for link in all_content:
         # indicates the file has been deleted
         if "href" not in link.attrs:
             continue
-        output.append([link.attrs['href'][2:],link.find('img').attrs['src'][2:]])
-    pprint.pprint("Here is the output: \n " + str(output))
-    print(str(len(output)) + " image URLs were scraped from 4chan")
+        output.append([link.attrs['href'][2:],
+                       link.find('img').attrs['src'][2:]])
+    return output
+
+if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        wallpaper_board_url = DEFAULT_URL
+    else:
+        wallpaper_board_url = sys.argv[1]
+    image_urls = fourchan_url_stripper(wallpaper_board_url)
+    pprint.pprint("Here is the output: \n " + str(image_urls))
+    print(str(len(image_urls)) + " image URLs were scraped from 4chan")
