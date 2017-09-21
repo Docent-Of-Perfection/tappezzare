@@ -22,11 +22,14 @@ def fourchan_url_stripper(board_url):
         # indicates the file has been deleted
         if "href" not in link.attrs:
             continue
-        output.append([link.attrs['href'][2:],
-                       link.find('img').attrs['src'][2:]])
+        fullres, thumb = link.attrs['href'][2:], link.find('img').attrs['src'][2:]
+        # checking thumbnail type unnecessary, because all thumbnails are .jpg
+        if not re.search("\.(jpe?g|gif|png)$", fullres):
+            continue
+        output.append([fullres, thumb])
     return output
 
-if __name__ == '__main__':
+def main():
     if len(sys.argv) == 1:
         wallpaper_board_url = DEFAULT_URL
     else:
@@ -34,3 +37,8 @@ if __name__ == '__main__':
     image_urls = fourchan_url_stripper(wallpaper_board_url)
     pprint.pprint("Here is the output: \n " + str(image_urls))
     print(str(len(image_urls)) + " image URLs were scraped from 4chan")
+
+
+if __name__ == '__main__':
+    main()
+    
