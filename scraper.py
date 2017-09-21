@@ -18,7 +18,7 @@ def fourchan_url_stripper(board_url):
     output = []
     all_content = fourchan_markup.select(".fileThumb")
     # exclude sticky and FAQ  images if the landing page for wg
-    if board_url == "http://4chan.org/wg/":
+    if board_url == "https://boards.4chan.org/wg/":
         all_content = all_content[2:]
     for link in all_content:
         # indicates the file has been deleted

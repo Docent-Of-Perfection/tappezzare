@@ -8,7 +8,7 @@ def generate_fullres_tags(board_url):
 
 def generate_thumb_tags(board_url):
     tagstext = '<img src="https://{}">'
-    return [tagstext.format(p[0]) for p in fourchan_url_stripper(board_url)]
+    return [tagstext.format(p[1]) for p in fourchan_url_stripper(board_url)]
 
 def generate_nested_tags(board_url):
     tagstext = '<a href="{}"><img src="https://{}"></a>'
@@ -22,8 +22,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="generate img tags for copy-paste")
     parser.add_argument('-u', '--url', nargs='*', default=[DEFAULT_URL],
                         help="list of urls to scrape")
-    parser.add_argument('-t', '--tagstyle', nargs=1, help='style of tag to generate',
-                        choices=["fullres", "f", "thumb", "t", "nested", "n"],
+    parser.add_argument('-t', '--tagstyle', nargs='?', help='style of tag to generate',
+                        choices={"fullres", "f", "thumb", "t", "nested", "n"},
                         default="f")
     args = parser.parse_args()
     
