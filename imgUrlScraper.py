@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import requests, bs4, pprint
 
 def dbug(stuff):
@@ -49,12 +51,27 @@ def loopThroughPages(url):
             pageLinks = getAllLinks(markup)
 
 loopThroughPages(wgUrl)
-
+'''
 #from parentThreads add to imageMaster
 for link in parentThreads:
     markup = getMarkup(link)
     grabImgsFromPage(markup)
+'''
+def requestThenGrab(urls):
+    for link in urls:
+        markup = getMarkup(link)
+        grabImgsFromPage(markup)
 
-print(imageMaster)
+requestThenGrab(parentThreads)
 
-
+#TODO: Quit thumbnailing subjects without fucking up pairing in other list items
+def iterateNestedLists(lists):
+    for sublist in lists:
+        for idx,pic in enumerate(sublist):
+            if pic[-4:] == '.jpg' or '.png':
+                sublist[idx] += ':' + pic[:-4] + 's.jpg'
+            else:
+                del pic
+iterateNestedLists(imageMaster)
+pprint.pprint(imageMaster)
+print(len(imageMaster))
